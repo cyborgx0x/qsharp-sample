@@ -8,7 +8,7 @@ namespace IronSulfurSimulation {
     operation SimulateFeSCluster() : Result[] {
         // Số qubit đại diện cho 2 electron trên 2 nguyên tử Fe
         use qubits = Qubit[2];
-        
+
         // Áp dụng cổng Hadamard để tạo trạng thái siêu vị (superposition)
         for q in qubits {
             H(q);
@@ -24,19 +24,20 @@ namespace IronSulfurSimulation {
         Rz(U, qubits[0]); // Tương tác onsite
 
         // Đo trạng thái cuối cùng
-        let results = MultiM(qubits);
-        
-        // Reset qubits về trạng thái ban đầu
-        ResetAll(qubits);
-        
-        return results;
+        let result0 = MResetZ(qubits[0]);
+        let result1 = MResetZ(qubits[1]);
+
+
+        return [result0, result1];
     }
+
+
 
     // Hàm chính để chạy mô phỏng
     @EntryPoint()
     operation Main() : Unit {
         Message("Starting quantum simulation of [2Fe-2S] cluster...");
-        
+
         // Chạy mô phỏng 100 lần để lấy thống kê
         mutable zeroCount = 0;
         mutable oneCount = 0;
